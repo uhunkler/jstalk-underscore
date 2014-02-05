@@ -1,0 +1,179 @@
+// Helper functions
+// Adapted from the underscore library
+// http://underscorejs.org
+// (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+
+// Establish the root object
+var _ = {};
+
+// Establish the object that gets returned to break out of a loop iteration.
+_.breaker = {};
+
+// Shortcut function for checking if an object has a given property directly
+// on itself (in other words, not on a prototype).
+_.has = function (obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+};
+
+// Keep the identity function around for default iterators.
+_.identity = function (value) {
+  return value;
+};
+
+// The cornerstone, an `each` implementation
+_.each = function (obj, iterator, context) {
+  if (obj === null) {
+    return;
+  }
+  if (context === undefined) {
+    context = obj;
+  }
+  if (obj.length === +obj.length) {
+    var i, l;
+    for (i = 0, l = obj.length; i < l; i++) {
+      if (iterator.call(context, obj[i], i, obj) === _.breaker) {
+        return;
+      }
+    }
+  } else if (typeof obj.length === "function" && obj.length() === +obj.length()) {
+    var j, m;
+    for (j = 0, m = obj.length(); j < m; j++) {
+      if (iterator.call(context, obj[j], j, obj) === _.breaker) {
+        return;
+      }
+    }
+  } else {
+    var key;
+    for (key in obj) {
+      if (_.has(obj, key)) {
+        if (iterator.call(context, obj[key], key, obj) === _.breaker) {
+          return;
+        }
+      }
+    }
+  }
+};
+
+// Determine if at least one element in the object matches a truth test.
+_.any = function (obj, iterator, context) {
+  if (!iterator) {
+    iterator = _.identity;
+  }
+  var result = false;
+  if (obj === null) {
+    return result;
+  }
+  if (context === undefined) {
+    context = obj;
+  }
+  _.each(obj, function (value, index, list) {
+    if (result || (result = iterator.call(context, value, index, list))) {
+      return _.breaker;
+    }
+  });
+  return !!result;
+};
+
+// Return the first value which passes a truth test. 
+_.find = function (obj, iterator, context) {
+  var result;
+  if (context === undefined) {
+    context = obj;
+  }
+  _.any(obj, function (value, index, list) {
+    if (iterator.call(context, value, index, list)) {
+      result = value;
+      return true;
+    }
+  });
+  return result;
+};
+
+// Return all the elements that pass a truth test.
+_.filter = function (obj, iterator, context) {
+  var results = [];
+  if (obj === null) {
+    return results;
+  }
+  if (context === undefined) {
+    context = obj;
+  }
+  _.each(obj, function (value, index, list) {
+    if (iterator.call(context, value, index, list)) {
+      results[results.length] = value;
+    }
+  });
+  return results;
+};
+
+// Return the number of elements in an object.
+_.size = function (obj) {
+  if (obj === null) {
+    return 0;
+  }
+  if (obj.length === +obj.length) {
+    return obj.length;
+  } else if (typeof obj.length === "function" && obj.length() === +obj.length()) {
+    return obj.length();
+  } else {
+    return _.keys(obj).length;
+  }
+};
+
+// Retrieve the names of an object's properties.
+_.keys = function (obj) {
+  if (obj !== Object(obj)) {
+    throw new TypeError("Invalid object");
+  }
+  var keys = [], key;
+  for (key in obj) {
+    if (_.has(obj, key)) {
+      keys[keys.length] = key;
+    }
+  }
+  return keys;
+};
+
+// Unique revers function for JSTalk arrays and JS arrays.
+// Use the native Cocoa and JS functions
+_.reverse = function (obj) {
+  if (_.isJSTArray(obj)) {
+    return obj.reverseObjectEnumerator().allObjects();
+  } else if (_.isArray(obj)) {
+    return obj.reverse();
+  }
+};
+
+// Is a given variable an JSTalk object?
+_.isJSTObject = function (obj) {
+  return Object.prototype.toString.call(obj) === "[object JSCocoa box]";
+};
+
+// Is a given variable an JSTalk array?
+_.isJSTArray = function (obj) {
+  if (!_.isJSTObject(obj)) {
+    return false;
+  }
+  var s = NSStringFromClass(obj.class()).toString();
+  return s.indexOf("__NSArray") !== -1;
+};
+
+// Is a given variable an array?
+_.isArray = function (obj) {
+  return Object.prototype.toString.call(obj) === "[object Array]";
+};
+
+// Is a given variable an object?
+_.isObject = function (obj) {
+  return obj === Object(obj);
+};
+
+// Is a given variable undefined?
+_.isUndefined = function (obj) {
+  return obj === void 0;
+};
+
+// Is a given value equal to null?
+_.isNull = function (obj) {
+  return obj === null;
+};
