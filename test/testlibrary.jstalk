@@ -1,0 +1,48 @@
+/**
+ * Test object for simple asserts
+ * 
+ * test.assert( typeof 1 === 'number', '1 is a number' ); // add a test
+ * test.print( 'text' ); // add some text
+ * test.show(); // output all results
+ */
+/*global log:false */
+var test = {
+  // Collect the tests
+  heap: [],
+
+  /**
+   * Assert one statement
+   *
+   * Add the truthiness and the description to the heap.
+   * 
+   * @param  {mixed} value The truthyness of the assert
+   * @param  {string} desc The test description
+   */
+  assert: function (value, desc) {
+    var result = value ? "--- pass: " : "xxx fail: ";
+    result += desc;
+    this.heap.push(result);
+  },
+
+  /**
+   * Add a text or comment to the heap.
+   * 
+   * @param  {string} desc The description text
+   */
+  print: function (desc) {
+    this.heap.push(desc);
+  },
+
+  /**
+   * Show all test results.
+   *
+   * Log the test results to the console
+   */
+  show: function () {
+    var s = '', i, l = this.heap.length;
+    for (i = 0; i < l; i++) {
+      s += this.heap[i] + "\n";
+    }
+    log(s);
+  }
+};

@@ -1,0 +1,7 @@
+// test the page variable: var page = doc.currentPage();
+test.print('\n\nTest the "page" variable:');
+test.assert(typeof page === 'object', 'The page variable is a JS object');
+test.assert(_.isObject(page), 'The page variable is a JS object - underscore');
+test.assert(_.isJSTObject(page), 'The page variable is a JSTObject - underscore');
+test.assert(! _.isArray(page), 'The page variable is not a JS array - underscore');
+test.assert(! _.isJSTArray(page), 'The page variable is not a JSTArray - underscore');

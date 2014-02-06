@@ -1,0 +1,7 @@
+// Tets the layers variable: var layers = page.layers();
+test.print('\n\nTest the "layers" variable:');
+test.assert(typeof layers === 'object', 'The layers variable is a JS object');
+test.assert(_.isObject(layers), 'The layers variable is a JS object - underscore');
+test.assert(_.isJSTObject(layers), 'The layers variable is a JSTObject - underscore');
+test.assert(_.isJSTArray(layers), 'The layers variable is a JSTArray - underscore');
+test.assert(! _.isArray(layers), 'The layers variable is not a JS array - underscore');
