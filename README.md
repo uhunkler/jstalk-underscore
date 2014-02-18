@@ -10,8 +10,8 @@ The methods implemented so far:
 - has
 - identity
 - include
-- isJSTObject
-- isJSTArray
+- isJSTObject (jstalk only)
+- isJSTArray (jstalk only)
 - isArray
 - isObject
 - isUndefined
