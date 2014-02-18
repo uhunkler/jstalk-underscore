@@ -1,4 +1,5 @@
 // test (shift ctrl t)
+// set the correct path to the underscore.jstalk library
 #import 'test/underscore.jstalk'
 #import 'test/testlibrary.jstalk'
 

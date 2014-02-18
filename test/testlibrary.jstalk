@@ -39,7 +39,8 @@ var test = {
    * Log the test results to the console
    */
   show: function () {
-    var s = '', i, l = this.heap.length;
+    var s = new Date() + '\n', 
+        i, l = this.heap.length;
     for (i = 0; i < l; i++) {
       s += this.heap[i] + "\n";
     }

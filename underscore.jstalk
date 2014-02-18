@@ -29,12 +29,23 @@ _.each = function (obj, iterator, context) {
     if (nativeForEach && obj.forEach === nativeForEach) {
       obj.forEach(iterator, context);
     } else {
-    var i, l;
-    for (i = 0, l = obj.length; i < l; i++) {
-      if (iterator.call(context, obj[i], i, obj) === _.breaker) {
-        return;
+      var i, l;
+      for (i = 0, l = obj.length; i < l; i++) {
+        if (iterator.call(context, obj[i], i, obj) === _.breaker) {
+          return;
+        }
       }
     }
+  // Try to use the Objective-C objectEnumerator function which is faster than the for loop
+  } else if (typeof obj.objectEnumerator === "function") {
+    var enumerator = obj.objectEnumerator(),
+        ele = {},
+        j = 0;
+    while (ele = enumerator.nextObject()) {
+      if (iterator.call(context, ele, j, obj) === _.breaker) {
+        return;
+      };
+      j = j + 1;
     }
   } else if (typeof obj.length === "function" && obj.length() === +obj.length()) {
     var j, m;
